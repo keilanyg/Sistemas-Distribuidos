@@ -3,6 +3,23 @@ import db
     
 app = Flask(__name__)
 
+@app.route("/countries/<int:id>", methods=['GET'])
+def id_countries(id):
+    countries = db.query_db(f'select * from countries where id = {id}')
+    return jsonify(countries),200
+        
+@app.route("/countries/<int:id>", methods=['PUT'])
+def edit_countries_id(id):
+    dado = request.get_json()
+    countries = db.query_db('UPDATE countries SET country_name="{}", capital="{}" WHERE id = "{}"'.format(dado["country_name"], dado["capital"], id))
+    return jsonify(countries)
+        
+@app.route("/countries/<int:id>", methods=['DELETE'])
+def delete_countries_id(id):
+    countries = db.query_db(f'DELETE from countries where id = {id}')
+    return jsonify(countries),200
+
+
 @app.route("/countries",methods=['GET'])
 def get_countries():
     countries = db.query_db('select * from countries')
